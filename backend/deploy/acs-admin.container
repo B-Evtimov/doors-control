@@ -1,0 +1,28 @@
+[Unit]
+Description=ACS admin application
+After=network-online.target
+
+[Container]
+Image=localhost/acs-admin:latest
+ContainerName=acs-admin
+
+# Loopback, and in this deployment reached over the private mesh network.
+# There is no public hostname and no DNS record for this service.
+PublishPort=127.0.0.1:8081:8081
+
+Network=acs-internal.network
+ReadOnly=true
+NoNewPrivileges=true
+DropCapability=ALL
+Tmpfs=/tmp:size=16M,mode=1777
+
+Environment=ACS_ENV=production
+Environment=ACS_ADMIN_HOST=127.0.0.1
+EnvironmentFile=%h/.config/acs/admin.env
+
+[Service]
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target

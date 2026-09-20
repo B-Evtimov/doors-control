@@ -1,0 +1,36 @@
+# Rootless Podman Quadlet unit. Place in ~/.config/containers/systemd/ of the
+# unprivileged service user, then: systemctl --user daemon-reload
+#
+# Example names only. Nothing here refers to a real host.
+
+[Unit]
+Description=ACS command signer
+After=network-online.target
+
+[Container]
+Image=localhost/acs-signer:latest
+ContainerName=acs-signer
+
+# The signer has no network namespace. It cannot reach the database, the
+# internet, or any other container - only the socket below.
+Network=none
+
+ReadOnly=true
+NoNewPrivileges=true
+DropCapability=ALL
+Tmpfs=/tmp:size=8M,mode=1777
+
+Volume=acs-signer-sock.volume:/run/acs-signer:Z
+
+Environment=ACS_SIGNER_SOCKET=/run/acs-signer/signer.sock
+Environment=ACS_SIGNER_KEY_ID=signer-1
+# The private key is read from a systemd credential, not from this file and
+# not from the environment of any other unit.
+Secret=acs-signer-key,type=env,target=ACS_SIGNER_PRIVATE_KEY
+
+[Service]
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target

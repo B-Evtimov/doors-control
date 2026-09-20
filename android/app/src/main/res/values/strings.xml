@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Evtimov Doors</string>
+
+    <string name="enroll_title">Set up this phone</string>
+    <string name="enroll_subtitle">Enter the enrolment code your administrator gave you. It is valid once.</string>
+    <string name="enroll_code_label">Enrolment code</string>
+    <string name="enroll_device_label">Name for this phone</string>
+    <string name="enroll_action">Enrol</string>
+
+    <string name="doors_title">Doors</string>
+    <string name="doors_empty">No doors are assigned to you yet.</string>
+    <string name="doors_offline">Controller offline</string>
+    <string name="doors_out_of_range">Move closer to the door</string>
+
+    <string name="unlock_action">Unlock</string>
+    <string name="unlock_opening">Opening…</string>
+    <string name="unlock_opened">Open</string>
+
+    <string name="history_title">My access</string>
+    <string name="settings_title">Settings</string>
+
+    <string name="biometric_title">Confirm it is you</string>
+    <string name="biometric_subtitle">Your fingerprint or face unlocks the door.</string>
+    <string name="biometric_cancel">Cancel</string>
+
+    <string name="error_offline">No connection to the server.</string>
+    <string name="error_denied">You do not have access to this door right now.</string>
+    <string name="error_not_present">Move closer to the door and try again.</string>
+    <string name="error_controller_offline">This door is not reachable right now.</string>
+    <string name="error_rate_limited">Too many attempts. Wait a moment.</string>
+    <string name="error_failed">The door did not confirm. Nothing was opened.</string>
+    <string name="error_session">Your session ended. Sign in again.</string>
+</resources>

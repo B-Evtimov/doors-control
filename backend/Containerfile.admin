@@ -1,0 +1,28 @@
+# Admin application. Same code base, different entry point, different database
+# role, bound to loopback by the unit file that runs it.
+FROM docker.io/library/python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+RUN groupadd --gid 10003 acsadmin && \
+    useradd --uid 10003 --gid acsadmin --no-create-home --shell /usr/sbin/nologin acsadmin
+
+WORKDIR /srv/acs
+
+COPY pyproject.toml ./
+COPY app ./app
+COPY admin ./admin
+COPY signer ./signer
+
+RUN pip install --no-cache-dir . && \
+    find /srv/acs -name '__pycache__' -type d -prune -exec rm -rf {} +
+
+USER acsadmin:acsadmin
+
+EXPOSE 8081
+
+CMD ["uvicorn", "admin.main:app", \
+     "--host", "127.0.0.1", "--port", "8081", \
+     "--no-server-header", "--log-level", "info"]

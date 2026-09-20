@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <rect width="900" height="620" fill="#ffffff"/>
+  <text x="24" y="36" font-size="19" font-weight="700" fill="#111827">Evtimov Doors Control System — controller wiring</text>
+  <text x="24" y="58" font-size="12" fill="#6b7280">ESP32-WROOM-32 (38 pin) · opto-isolated relay · fail-secure strike · separate 12 V supply</text>
+
+  <!-- ESP32 -->
+  <rect x="60" y="110" width="230" height="330" rx="10" fill="#f9fafb" stroke="#374151" stroke-width="2"/>
+  <rect x="120" y="98" width="110" height="26" rx="4" fill="#e5e7eb" stroke="#9ca3af"/>
+  <text x="175" y="116" font-size="11" text-anchor="middle" fill="#374151">antenna</text>
+  <text x="175" y="150" font-size="14" font-weight="700" text-anchor="middle" fill="#111827">ESP32-WROOM-32</text>
+  <text x="175" y="168" font-size="11" text-anchor="middle" fill="#6b7280">38 pin dev board</text>
+
+  <text x="76" y="205" font-size="12" fill="#111827">5V</text>
+  <text x="76" y="235" font-size="12" fill="#111827">GND</text>
+  <text x="76" y="265" font-size="12" fill="#111827">3V3</text>
+  <text x="222" y="205" font-size="12" text-anchor="end" fill="#111827">GPIO26</text>
+  <text x="222" y="235" font-size="12" text-anchor="end" fill="#111827">GPIO27</text>
+  <text x="222" y="265" font-size="12" text-anchor="end" fill="#111827">GPIO14</text>
+  <text x="222" y="295" font-size="12" text-anchor="end" fill="#111827">GPIO2</text>
+  <text x="140" y="410" font-size="11" text-anchor="middle" fill="#6b7280">USB / 5 V in</text>
+
+  <circle cx="66" cy="201" r="4" fill="#111827"/>
+  <circle cx="66" cy="231" r="4" fill="#111827"/>
+  <circle cx="66" cy="261" r="4" fill="#111827"/>
+  <circle cx="284" cy="201" r="4" fill="#111827"/>
+  <circle cx="284" cy="231" r="4" fill="#111827"/>
+  <circle cx="284" cy="261" r="4" fill="#111827"/>
+  <circle cx="284" cy="291" r="4" fill="#111827"/>
+
+  <!-- Relay module -->
+  <rect x="420" y="130" width="210" height="150" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+  <text x="525" y="158" font-size="13" font-weight="700" text-anchor="middle" fill="#7c2d12">Opto-isolated relay</text>
+  <text x="525" y="176" font-size="11" text-anchor="middle" fill="#9a3412">1 channel · 10 A · JD-VCC</text>
+  <text x="434" y="206" font-size="11" fill="#7c2d12">IN</text>
+  <text x="434" y="230" font-size="11" fill="#7c2d12">VCC</text>
+  <text x="434" y="254" font-size="11" fill="#7c2d12">GND</text>
+  <text x="616" y="206" font-size="11" text-anchor="end" fill="#7c2d12">COM</text>
+  <text x="616" y="230" font-size="11" text-anchor="end" fill="#7c2d12">NO</text>
+  <text x="616" y="254" font-size="11" text-anchor="end" fill="#7c2d12">NC (unused)</text>
+  <circle cx="416" cy="202" r="4" fill="#7c2d12"/>
+  <circle cx="416" cy="226" r="4" fill="#7c2d12"/>
+  <circle cx="416" cy="250" r="4" fill="#7c2d12"/>
+  <circle cx="634" cy="202" r="4" fill="#7c2d12"/>
+  <circle cx="634" cy="226" r="4" fill="#7c2d12"/>
+
+  <!-- Strike -->
+  <rect x="720" y="150" width="150" height="110" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="795" y="178" font-size="13" font-weight="700" text-anchor="middle" fill="#1e3a8a">Electric strike</text>
+  <text x="795" y="198" font-size="11" text-anchor="middle" fill="#1e40af">12 V DC, fail-secure</text>
+  <text x="795" y="222" font-size="11" text-anchor="middle" fill="#1e40af">flyback diode across</text>
+  <text x="795" y="238" font-size="11" text-anchor="middle" fill="#1e40af">the coil (1N4007)</text>
+
+  <!-- PSU -->
+  <rect x="420" y="330" width="210" height="100" rx="10" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="525" y="358" font-size="13" font-weight="700" text-anchor="middle" fill="#14532d">12 V supply</text>
+  <text x="525" y="378" font-size="11" text-anchor="middle" fill="#166534">strike only — not the ESP32</text>
+  <text x="525" y="398" font-size="11" text-anchor="middle" fill="#166534">grounds tied at one point</text>
+  <circle cx="634" cy="360" r="4" fill="#14532d"/>
+  <circle cx="634" cy="392" r="4" fill="#14532d"/>
+
+  <!-- Sensors -->
+  <rect x="60" y="470" width="180" height="90" rx="10" fill="#faf5ff" stroke="#6d28d9" stroke-width="2"/>
+  <text x="150" y="496" font-size="12" font-weight="700" text-anchor="middle" fill="#4c1d95">Reed switch</text>
+  <text x="150" y="514" font-size="11" text-anchor="middle" fill="#5b21b6">GPIO27 — GND</text>
+  <text x="150" y="532" font-size="11" text-anchor="middle" fill="#5b21b6">internal pull-up, closed = LOW</text>
+
+  <rect x="270" y="470" width="180" height="90" rx="10" fill="#faf5ff" stroke="#6d28d9" stroke-width="2"/>
+  <text x="360" y="496" font-size="12" font-weight="700" text-anchor="middle" fill="#4c1d95">Tamper switch</text>
+  <text x="360" y="514" font-size="11" text-anchor="middle" fill="#5b21b6">GPIO14 — GND</text>
+  <text x="360" y="532" font-size="11" text-anchor="middle" fill="#5b21b6">enclosure opened = HIGH</text>
+
+  <!-- Wires -->
+  <path d="M284 201 H 416" stroke="#c2410c" stroke-width="2.5" fill="none"/>
+  <text x="350" y="194" font-size="10" text-anchor="middle" fill="#c2410c">GPIO26 → IN</text>
+
+  <path d="M66 201 H 40 V 226 H 416" stroke="#dc2626" stroke-width="2.5" fill="none"/>
+  <text x="240" y="220" font-size="10" fill="#dc2626">5 V → VCC</text>
+
+  <path d="M66 231 H 30 V 250 H 416" stroke="#111827" stroke-width="2.5" fill="none"/>
+  <text x="240" y="268" font-size="10" fill="#111827">GND → GND (common)</text>
+
+  <path d="M634 202 H 690 V 190 H 720" stroke="#1d4ed8" stroke-width="2.5" fill="none"/>
+  <path d="M634 226 H 670 V 330 H 634" stroke="#15803d" stroke-width="2.5" fill="none" stroke-dasharray="0"/>
+  <text x="700" y="184" font-size="10" fill="#1d4ed8">COM → strike +</text>
+
+  <path d="M634 360 H 700 V 260 H 720" stroke="#15803d" stroke-width="2.5" fill="none"/>
+  <text x="706" y="300" font-size="10" fill="#15803d">12 V +</text>
+  <path d="M634 392 H 860 V 260" stroke="#111827" stroke-width="2.5" fill="none"/>
+  <text x="746" y="408" font-size="10" fill="#111827">12 V − → strike −</text>
+
+  <path d="M284 231 H 320 V 470" stroke="#6d28d9" stroke-width="2.5" fill="none"/>
+  <path d="M284 261 H 300 V 440 H 150 V 470" stroke="#6d28d9" stroke-width="2.5" fill="none"/>
+
+  <!-- Notes -->
+  <text x="470" y="470" font-size="12" font-weight="700" fill="#111827">Notes</text>
+  <text x="470" y="492" font-size="11" fill="#374151">1. Fail-secure strike: no current, door locked. Power loss locks the door.</text>
+  <text x="470" y="510" font-size="11" fill="#374151">2. Strike current never touches the ESP32 — only the relay contacts.</text>
+  <text x="470" y="528" font-size="11" fill="#374151">3. Flyback diode across the coil, cathode to +12 V.</text>
+  <text x="470" y="546" font-size="11" fill="#374151">4. Relay module jumper on JD-VCC if your board has one.</text>
+  <text x="470" y="564" font-size="11" fill="#374151">5. Mount the controller on the secure side of the door.</text>
+</svg>

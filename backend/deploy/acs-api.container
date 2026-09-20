@@ -1,0 +1,33 @@
+[Unit]
+Description=ACS public API
+After=network-online.target acs-signer.service
+Requires=acs-signer.service
+
+[Container]
+Image=localhost/acs-api:latest
+ContainerName=acs-api
+
+# Published to loopback only. The tunnel or reverse proxy in front is what
+# faces the internet; this port is not reachable from outside the host.
+PublishPort=127.0.0.1:8080:8080
+
+Network=acs-internal.network
+ReadOnly=true
+NoNewPrivileges=true
+DropCapability=ALL
+Tmpfs=/tmp:size=32M,mode=1777
+
+Volume=acs-signer-sock.volume:/run/acs-signer:Z
+
+Environment=ACS_ENV=production
+Environment=ACS_TRUSTED_PROXIES=127.0.0.1/32
+Environment=ACS_ATTESTATION_MODE=strict
+Environment=ACS_SIGNER_SOCKET=/run/acs-signer/signer.sock
+EnvironmentFile=%h/.config/acs/api.env
+
+[Service]
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target

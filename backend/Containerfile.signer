@@ -1,0 +1,26 @@
+# Command signer.
+#
+# This image has no shell entry point worth having, no network in the unit
+# that runs it, and one writable path: the directory holding its socket.
+FROM docker.io/library/python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+RUN groupadd --gid 10002 acssigner && \
+    useradd --uid 10002 --gid acssigner --no-create-home --shell /usr/sbin/nologin acssigner
+
+WORKDIR /srv/acs
+
+COPY pyproject.toml ./
+COPY signer ./signer
+
+RUN pip install --no-cache-dir cryptography && \
+    find /srv/acs -name '__pycache__' -type d -prune -exec rm -rf {} +
+
+USER acssigner:acssigner
+
+ENV PYTHONPATH=/srv/acs
+
+CMD ["python", "-m", "signer.server"]

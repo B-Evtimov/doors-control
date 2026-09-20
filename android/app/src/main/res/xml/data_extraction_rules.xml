@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Nothing leaves the device. Cloud backup and device-to-device transfer are
+  both excluded in full: a token that survives into a restored backup is a
+  token that outlives the phone it was bound to.
+
+  The identity key cannot be backed up in any case - it is in the Keystore and
+  is not exportable - so a restored install has to enrol again, which is the
+  intended behaviour.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="file" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="file" />
+    </device-transfer>
+</data-extraction-rules>

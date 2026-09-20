@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Cleartext is off everywhere, including debug builds. There is no
+  configuration of this app that talks HTTP.
+
+  User-added certificate authorities are not trusted either, so an installed
+  proxy certificate does not silently become a man in the middle. Certificate
+  pinning in OkHttp is the second layer; this is the first.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="false">api.example.invalid</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>

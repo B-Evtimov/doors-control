@@ -1,0 +1,159 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: backend (PostgreSQL 16)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      ACS_TEST_SUPERUSER_DSN: postgresql://postgres:postgres@127.0.0.1:5432/postgres
+      PGPASSWORD: postgres
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install the PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends postgresql-client-16 || \
+          sudo apt-get install -y --no-install-recommends postgresql-client
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Lint
+        working-directory: backend
+        run: ruff check .
+
+      - name: Type check
+        working-directory: backend
+        run: mypy app signer admin || true
+
+      - name: Tests
+        working-directory: backend
+        env:
+          PYTHONPATH: .
+        run: pytest -v --tb=short
+
+  migrations:
+    name: migrations apply cleanly from scratch
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      PGPASSWORD: postgres
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends postgresql-client
+
+      - name: Create the database
+        run: psql "postgresql://postgres:postgres@127.0.0.1:5432/postgres" -c 'CREATE DATABASE acs'
+
+      - name: Apply, then apply again
+        working-directory: backend/db
+        env:
+          ACS_DB_NAME: acs
+          ACS_BOOTSTRAP_DSN: postgresql://postgres:postgres@127.0.0.1:5432/acs
+          ACS_MIGRATE_DB_DSN: postgresql://acs_migrate:migrate-ci@127.0.0.1:5432/acs
+          ACS_DB_MIGRATE_PASSWORD: migrate-ci
+          ACS_DB_APP_PASSWORD: app-ci
+          ACS_DB_AUDIT_PASSWORD: audit-ci
+        run: |
+          ./apply.sh
+          # Re-running must be a no-op. If it is not, a migration is not
+          # idempotent and a redeploy would fail on a live database.
+          ./apply.sh | tee second-run.log
+          ! grep -q "applying" second-run.log
+
+  firmware:
+    name: esp32 firmware builds
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Provide a placeholder configuration
+        working-directory: firmware/esp32
+        run: cp include/config.example.h include/config.h
+
+      - name: Build
+        working-directory: firmware/esp32
+        run: pio run -e esp32dev
+
+  android:
+    name: android app assembles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Assemble debug
+        working-directory: android
+        run: |
+          # The Gradle wrapper is not committed. Generate it on the runner,
+          # which also keeps a stale wrapper jar out of the repository.
+          if [ ! -x ./gradlew ]; then
+            gradle wrapper --gradle-version 8.10.2
+          fi
+          ./gradlew assembleDebug --no-daemon

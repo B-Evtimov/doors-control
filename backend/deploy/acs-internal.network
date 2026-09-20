@@ -1,0 +1,8 @@
+[Unit]
+Description=ACS internal container network
+
+[Network]
+NetworkName=acs-internal
+# No route out. The database and the API talk to each other and to nothing
+# else; egress to the internet happens only through the reverse proxy.
+Internal=true
