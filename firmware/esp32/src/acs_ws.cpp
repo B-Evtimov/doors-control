@@ -31,8 +31,6 @@ void onWebSocketEvent(WStype_t type, uint8_t *payload, size_t length) {
 }  // namespace
 
 void WsLink::begin() {
-    instance = this;
-
     socketClient.beginSslWithCA(ACS_SERVER_HOST, ACS_SERVER_PORT, ACS_SERVER_PATH,
                                 ACS_SERVER_ROOT_CA_PEM);
     socketClient.onEvent(onWebSocketEvent);
