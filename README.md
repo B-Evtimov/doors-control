@@ -1,5 +1,8 @@
 # Evtimov Doors Control System
 
+[![CI](https://github.com/B-Evtimov/doors-control/actions/workflows/ci.yml/badge.svg)](https://github.com/B-Evtimov/doors-control/actions/workflows/ci.yml)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
+
 **A phone-only door access system where the server that opens the door cannot
 forge the command, the app that runs it cannot rewrite the log, and a valid
 token from the other side of the world is not enough.**
@@ -11,7 +14,10 @@ tampering with a row that has already been written is provably detectable —
 there is a test that performs the attack as a database superuser and asserts
 that the row is named.
 
-[GIF: door opening]
+> **Status:** a reference implementation built as a portfolio project. The backend,
+> database, firmware and Android app all build in CI, and the backend is covered by
+> 34 tests against a real PostgreSQL 16. It has not been deployed to production
+> hardware.
 
 ```mermaid
 flowchart LR
@@ -309,7 +315,7 @@ lists all of them with empty values and a line explaining what each is for.
 Wiring diagram and the five things that matter more than the pinout:
 [`firmware/esp32/README.md`](firmware/esp32/README.md)
 
-[photo: controller]
+<p align="center"><img src="firmware/esp32/wiring.svg" alt="ESP32 controller wiring" width="720"></p>
 
 ---
 
@@ -355,8 +361,6 @@ cd ../firmware/esp32 && cp include/config.example.h include/config.h && pio run
 
 Production deployment, with Quadlet units and a reverse proxy example:
 [`docs/03-deployment.md`](docs/03-deployment.md)
-
-[screenshot: unlock screen]
 
 ## Project structure
 
